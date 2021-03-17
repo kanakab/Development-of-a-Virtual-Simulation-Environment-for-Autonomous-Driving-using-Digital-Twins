@@ -1,0 +1,281 @@
+1 Step: Open and Link Unrealengine and Github
+
+Create an account
+https://www.unrealengine.com/en-US/?sessionInvalidated=true
+
+Then go to Personal>Connections>Accounts, then connect to Github and login in Gitbub.
+
+
+
+2 Step: Clone Unrealengine and build Carla 
+https://carla.readthedocs.io/en/latest/build_linux/#carla-build
+
+
+sudo apt-get update &&
+sudo apt-get install wget software-properties-common &&
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test &&
+wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add - &&
+sudo apt-add-repository "deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-8 main" &&
+sudo apt-get update
+
+sudo apt-get install build-essential clang-8 lld-8 g++-7 cmake ninja-build libvulkan1 python python-pip python-dev python3-dev python3-pip libpng-dev libtiff5-dev libjpeg-dev tzdata sed curl unzip autoconf libtool rsync libxml2-dev &&
+pip2 install --user setuptools &&
+pip3 install --user -Iv setuptools==47.3.1 &&
+pip2 install --user distro &&
+pip3 install --user distro
+
+sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/lib/llvm-8/bin/clang++ 180 &&
+sudo update-alternatives --install /usr/bin/clang clang /usr/lib/llvm-8/bin/clang 180
+
+1. Clone the content for Unreal Engine 4.24 in your local computer.
+
+git clone --depth=1 -b 4.24 https://github.com/EpicGames/UnrealEngine.git ~/UnrealEngine_4.24
+
+2. Get into the directory where UE4.24 has been cloned.
+
+cd ~/UnrealEngine_4.24
+
+3. Download a patch for Unreal Engine. This patch fixes some Vulkan visualization issues that may occur when changing the map. Download and install it with the following commands.
+
+wget https://carla-releases.s3.eu-west-4. Make the build. This may take an hour or two depending on your system.
+
+./Setup.sh && ./GenerateProjectFiles.sh && make
+
+5. Open the Editor to checDownloading aria2 with sudo apt-get install aria2 will speed up the following commands.k that UE has been properly installed.
+
+cd ~/UnrealEngine_4.24/Engine/Binaries/Linux && ./UE4Editor
+
+Downloading aria2 with sudo apt-get install aria2 will speed up the following commands.
+
+
+Build Carla:
+
+git clone --branch 0.9.10 https://github.com/carla-simulator/carla
+
+1. Get into your root carla directory. The path should correspond with the repository just cloned.
+
+cd ~/carla
+
+2. Run the script to get the assets.
+
+./Update.sh
+
+Enter: gedit ~/.bashrc then save export UE4_ROOT=~/UnrealEngine_4.24 there.
+
+make PythonAPI
+
+make launch
+
+
+
+3 Step: Carla Simulator Installation
+
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 92635A407F7A020C
+
+sudo add-apt-repository "deb [arch=amd64 trusted=yes] http://dist.carla.org/carla-0.9.10/ all main"
+
+sudo apt-get update
+
+sudo apt-get install carla-simulator
+
+
+
+4 Step: Carla Ros Bridge
+
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 81061A1A042F527D &&
+
+sudo add-apt-repository "deb [arch=amd64 trusted=yes] http://dist.carla.org/carla-ros-bridge-melodic/ bionic main"
+
+sudo apt-get update
+
+sudo apt install carla-ros-bridge-melodic
+
+
+
+
+5 Step: Point Cloud maps for Carla Towns
+
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA0F9B7406F60E23
+
+sudo add-apt-repository "deb [arch=amd64 trusted=yes] http://dist.carla.org/carla-hdmaps/ bionic main"
+
+sudo apt-get update
+
+sudo apt install carla-hdmaps
+
+
+
+6 Step: Install Docker (19.03+)
+
+https://docs.docker.com/engine/install/ubuntu/
+
+sudo apt-get update
+
+sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+sudo apt-key fingerprint 0EBFCD88
+
+sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+
+sudo apt-get update
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+
+a. List the versions available in your repo:
+
+$ apt-cache madison docker-ce
+
+sudo apt-get install docker-ce=5:19.03.1~3-0~ubuntu-bionic docker-ce-cli= 5:19.03.1~3-0~ubuntu-bioniccontainerd.io
+
+sudo docker run hello-world
+
+Docker Group:
+sudo groupadd docker
+sudo usermod -aG docker $USER
+newgrp docker
+docker run hello-world
+
+
+
+7 Step: Install Nvidia docker
+
+https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker
+
+curl https://get.docker.com | sh \
+  && sudo systemctl --now enable docker
+
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
+   && curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add - \
+   && curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+
+curl -s -L https://nvidia.github.io/nvidia-container-runtime/experimental/$distribution/nvidia-container-runtime.list | sudo tee /etc/apt/sources.list.d/nvidia-container-runtime.list
+
+sudo apt-get update
+
+sudo apt-get install -y nvidia-docker2
+
+sudo systemctl restart docker
+
+sudo docker run --rm --gpus all nvidia/cuda:10.0-base nvidia-smi
+or 
+sudo docker run --rm --gpus all nvidia/cuda:11.0-base nvidia-smi
+
+
+
+8 Step:Install Carla-Autoware
+
+https://github.com/carla-simulator/carla-autoware
+
+git clone --recurse-submodules https://github.com/carla-simulator/carla-autoware
+
+cd carla-autoware && ./build.sh
+
+
+
+9 Step: How to Launch with Docker
+
+First Terminal:
+
+cd /carla/Dist/CARLA_Shipping_0.9.10/LinuxNoEditor
+
+./CarlaUE4.sh
+
+Second Terminal:
+
+cd carla-autoware
+sudo ./run.sh
+roslaunch carla_autoware_agent carla_autoware_agent.launch town:=Town01
+
+Third Terminal:
+
+cd carla-autoware
+sudo ./run.sh
+roslaunch runtime_manager runtime_manager.launch
+
+If necessary to launch the Unreal editor:
+
+cd Carla
+make launch
+
+
+
+
+10 Step: How to Launch without Docker
+
+First Terminal:
+
+cd /carla/Dist/CARLA_Shipping_0.9.10
+
+./CarlaUE4.sh
+
+Second Terminal:
+
+cd /carla/Dist/CARLA_Shipping_0.9.10/PythonAPI/util
+python config.py -m Town01
+
+Third Terminal:
+
+source ~/carla-ros-bridge/catkin_ws/devel/setup.bash
+roslaunch carla_ros_bridge carla_ros_bridge.launch
+
+
+Forth Terminal: 
+
+source ~/carla-ros-bridge/catkin_ws/devel/setup.bash
+roslaunch carla_ros_bridge carla_ros_bridge_with_example_ego_vehicle.launch
+
+Fith Terminal:
+
+cd autoware.ai/
+source install/setup.bash
+roslaunch runtime_manager runtime_manager.launch
+
+
+Sixth Terminal Just for rviz: 
+
+source ~/carla-ros-bridge/catkin_ws/devel/setup.bash
+roslaunch carla_ros_bridge carla_rviz.launch
+
+Seventh Terminal Actors:
+
+cd /opt/carla-simulator/PythonAPI/examples
+python spawn_npc.py -n80
+
+Eighth Termianl: Weather Conditions
+
+ 
+   ClearNoon, ClearSunset, CloudyNoon, CloudySunset, Default,
+    HardRainNoon, HardRainSunset, MidRainSunset, MidRainyNoon,
+    SoftRainNoon, SoftRainSunset, WetCloudyNoon, WetCloudySunset,
+    WetNoon, WetSunset.
+
+cd /opt/carla-simulator/PythonAPI/util
+python config.py --weather ClearSunset
+
+Tenth Terminal: Specific Ego
+
+cd /opt/carla-simulator/PythonAPI/examples
+python manual_control.py --filter twizy
+
+
+ROS-Bridge:
+/home/antonpc/autoware.ai/install/carla_autoware_bridge/share/carla_autoware_bridge/config/sensors.json
+
+Autoware_CArla:
+
+/var/lib/docker/overlay2/c05ab0b60e3f939e072bd8920ee8654e8a64ba9045a80ed4dc5283ab86960760/merged/home/autoware/carla_ws/src/carla-autoware-agent/agent/config/sensors.json
+
+
+
+
+
